@@ -9,7 +9,7 @@
 
 
 /* FIRST METHOD
-let a= 9;
+let a = 9;
 
 if(a == 1){
    console.log("один");
@@ -92,28 +92,26 @@ console.log(res);*/
 
 
 
-// Переменная хранит в себе единицу измерения одно из возможных значений (Byte, KB, MB, GB),
-// Вторая переменная хранит в себе целое число. В зависимости от того какая единица измерения написать скрипт,
-//  который выводит количество байт
+// Переменная хранит в себе единицу измерения одно из возможных значений(Byte, KB, MB, GB),
+//    Вторая переменная хранит в себе целое число.В зависимости от того какая единица измерения написать скрипт,
+//       который выводит количество байт
 // Для вычисления принимает счет что в каждой последующей единицы измерения хранится 1024 единиц более меньшего измерения.
 
 
+// let value = 'MB';
+// let num = 12;
 
-// function Bytes(bytes) {
-//     if (bytes < 1024) return bytes + " Bytes";
-//     else if (bytes < 1048576)
-//         return (bytes / 1024) + " KB";
 
-//     else if (bytes < 1073741824)
-//         return (bytes / 1048576) + " MB";
-
-//     else return (bytes / 1073741824) + " GB";
-// };
-
-// console.log(Bytes(1024));
-// console.log(Bytes(1048576));
-// console.log(Bytes(1073741824));
-// console.log(Bytes(232));
+// if (value == 'Byte') {
+//    console.log(num * 1);
+// }
+// else if (value == 'KB') {
+//    console.log(num * 1024);
+// } else if (value == 'MB') {
+//    console.log(num * 1048576);
+// } else if (value == 'GB') {
+//    console.log(num * 1073741824);
+// }
 
 
 // (3)
@@ -125,13 +123,11 @@ console.log(res);*/
 
 // let percentMonth = 3;
 // let credit = 85000;
-// let Year = 4;
+// let year = 4;
 // let res;
 
+// res = year * percentMonth * 12;
 
-// for (let i = 0; i <= Year; i++) {
-//    res = i * percentMonth * 12;
-// }
 
 
 // console.log(res + '% заплатит за все время ');
@@ -140,6 +136,6 @@ console.log(res);*/
 
 // console.log(res + '% заплатит за один календарный год');
 
-// res = (percentMonth * credit * 12 * Year) / 100;
+// res = (percentMonth * credit * 12 * year) / 100;
 // console.log(res + ' денежных средств клиента банка выплатит за все года')
 
