@@ -68,4 +68,5 @@
 //     return maxNum(b, a % b);
 // };
 
+
 // console.log(maxNum(12, 324))
