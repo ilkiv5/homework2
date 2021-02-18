@@ -5,62 +5,62 @@
  для всех цифр от 0 до 9. Реализовать двумя способами.*/
 
 //FIRST METHOD
-// function f(a) {
-//     if (a == 1) {
+// function f(number) {
+//     if (number == 1) {
 //         return 'one';
-//     } else if (a == 2) {
+//     } else if (number == 2) {
 //         return 'two';
-//     } else if (a == 3) {
+//     } else if (number == 3) {
 //         return 'three';
-//     } else if (a == 4) {
+//     } else if (number == 4) {
 //         return 'four';
-//     } else if (a == 5) {
+//     } else if (number == 5) {
 //         return 'five';
-//     } else if (a == 6) {
+//     } else if (number == 6) {
 //         return 'six';
-//     } else if (a == 7) {
+//     } else if (number == 7) {
 //         return 'seven';
-//     } else if (a == 8) {
+//     } else if (number == 8) {
 //         return 'eigth';
-//     } else if (a == 9) {
+//     } else if (number == 9) {
 //         return 'nine';
 //     } else {
 //         return 'invalid number';
 //     }
 // }
-// console.log(f());
+// console.log(f(19));
 
 //SECOND METHOD WITH SWITCH
 
-// function f(a) {
-//     switch (a) {
+// function f(number) {
+//     switch (number) {
 //         case 6: return res = 'six';
 //         case 7: return res = 'seven';
 //         case 8: return res = 'eigth';
 //         case 9: return res = 'nine';
 //         default:
-//     } if (a < 6 || a > 9) {
+//     } if (number < 6 || number > 9) {
 //         return 'invalid number';
 //     }
 // }
-// console.log(f(10));
+// console.log(f(6));
 
 //------------------------------------------------------------
 
 //Переменная хранит в себе значение, напишите скрипт которое выводит информацию о том,
 //что число является нулевым либо положительным либо отрицательным.*
 
-// function num(b) {
-//     if (b == 0) {
+// function valueNum(number) {
+//     if (number == 0) {
 //         return 'нулевое';
-//     } else if (b < 0) {
+//     } else if (number < 0) {
 //         return 'отрицательное';
-//     } else if (a > 0) {
+//     } else if (number > 0) {
 //         return 'положительное';
 
 //     }
 // }
-// console.log(num(0));
+// console.log(valueNum(0));
 
 //------------------------------------------------------------
 // Переменная хранит в себе единицу измерения одно из возможных значений(Byte, KB, MB, GB),
@@ -68,8 +68,7 @@
 //       который выводит количество байт
 // Для вычисления принимает счет что в каждой последующей единицы измерения хранится 1024 единиц более меньшего измерения.
 
-// function f(value, num) {
-
+// function quantityBytes(value, num) {
 //     if (value == 'Byte') {
 //         return num * 1;
 //     }
@@ -82,7 +81,7 @@
 //     }
 
 // }
-// console.log(f('MB', 20));
+// console.log(quantityBytes('MB', 20));
 
 
 //------------------------------------------------------------
@@ -105,30 +104,30 @@
 // Переменная содержит в себе число.
 // Написать скрипт который посчитает факториал этого числа.
 
-// function getFactorial(n) {
-//    if (n === 1) {
-//       return 1;
-//    }
-//    else {
+// function getFactorial(num) {
+//     if (num === 1) {
+//         return 1;
+//     }
+//     else {
 
-//       return n * getFactorial(n - 1);
-//    }
+//         return num * getFactorial(num - 1);
+//     }
 // }
-// var result = getFactorial(7);
-// console.log(result); 
+// var result = getFactorial(6);
+// console.log(result);
 
 //------------------------------------------------------------
 
 // Дано число - вывести первые N делителей этого числа нацело.
 
-// function divider(inputNum, n) {
-//    let outputNum = [];
-//    for (let i = 1; i <= inputNum && outputNum.length <= n - 1; i++) {
-//       if (!(inputNum % i)) {
-//          outputNum.push(i);
-//       }
-//    }
-//    return outputNum;
+// function divider(inputNum, nDinvider) {
+//     let outputNum = [];
+//     for (let i = 1; i <= inputNum && outputNum.length <= nDinvider - 1; i++) {
+//         if (!(inputNum % i)) {
+//             outputNum.push(i);
+//         }
+//     }
+//     return outputNum;
 // }
 // console.log(divider(20, 4));
 
@@ -137,14 +136,14 @@
 
 // Найти сумму цифр числа которые кратны двум
 
-// function f(a) {
+// function f(num) {
 //     let res = 0;
-//     while (a > 0) {
-//         let r = a % 10;
-//         if (r % 2 === 0) {
-//             res += r;
+//     while (num > 0) {
+//         let devider = num % 10;
+//         if (devider % 2 === 0) {
+//             res += devider;
 //         }
-//         a = parseInt((a / 10));
+//         num = parseInt((num / 10));
 //     }
 //     return res;
 // }
@@ -200,29 +199,29 @@
 
 //Написать функцию, которая умножает две матрицы
 
-// function MultiplyMatrix(a, b) {
-//     let rowsa = a.length;
-//     let colsa = a[0].length;
-//     let rowsb = b.length;
-//     let colsb = b[0].length;
-//     c = [];
-//     if (colsa != rowsb) return false;
-//     for (let i = 0; i < rowsa; i++) c[i] = [];
-//     for (let j = 0; j < colsb; j++) {
-//         for (let i = 0; i < rowsa; i++) {
-//             let t = 0;
-//             for (let k = 0; k < rowsb; k++) t += a[i][k] * b[k][j];
-//             c[i][j] = t;
+// function MultiplyMatrix(A, B) {
+//     let rowsA = A.length;
+//     let colsA = A[0].length;
+//     let rowsB = B.length;
+//     let colsB = B[0].length;
+//     arr = [];
+//     if (colsA != rowsB) return false;
+//     for (let i = 0; i < rowsA; i++) arr[i] = [];
+//     for (let j = 0; j < colsB; j++) {
+//         for (let i = 0; i < rowsA; i++) {
+//             let product = 0;
+//             for (let k = 0; k < rowsB; k++) product += A[i][k] * B[k][j];
+//             arr[i][j] = product;
 //         }
 //     }
-//     return c;
+//     return arr;
 // }
 // console.log(MultiplyMatrix([[1, 2], [3, 4]], [[5, 6], [7, 8]]));
 
 //------------------------------------------------------------
 
 //Найти номер столбца двумерного массива сумма которого является максимальной 
-// let mas = [
+// let items = [
 //     [1, 42, 3],
 //     [41, 5, 8],
 //     [5, 66, 78],
@@ -233,8 +232,8 @@
 //     sum: 0
 // };
 
-// for (let i = 0; i < mas[0].length; i++) {
-//    let currentSum = mas.reduce((prev, current) => prev + current[i], 0);
+// for (let i = 0; i < items[0].length; i++) {
+//     let currentSum = items.reduce((prev, current) => prev + current[i], 0);
 //     if (res.sum <= currentSum) {
 //         res.sum = currentSum;
 //         res.targetIndex = i + 1;
@@ -280,4 +279,6 @@
 //     return res;
 // }
 // console.log(cut(mas));
+
+
 
