@@ -5,7 +5,7 @@
  для всех цифр от 0 до 9. Реализовать двумя способами.*/
 
 //FIRST METHOD
-// function f(number) {
+// function comparison(number) {
 //     if (number == 1) {
 //         return 'one';
 //     } else if (number == 2) {
@@ -32,7 +32,7 @@
 
 //SECOND METHOD WITH SWITCH
 
-// function f(number) {
+// function comparisonSwitch(number) {
 //     switch (number) {
 //         case 6: return res = 'six';
 //         case 7: return res = 'seven';
