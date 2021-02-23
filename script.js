@@ -2,20 +2,20 @@
 // Задан двумерный массив - объединить каждый внутренний массив с 
 //верхнем массивом - только по уникальным значениям.
 
-// function onlyUnique(value, index, self) {
-//     return self.indexOf(value) === index;
-// }
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
 
-// var arr = [1, 2, 4, [8, 4, 12], [13, 29, 11], [0, 5, 3, 11], 5, 6, 7, [3, 8, 21], 3];
-// var arrUnique = arr.flat(2);
-// var unique = arrUnique.filter(onlyUnique);
-// console.log(unique);
+var arr = [1, 2, 4, [8, 4, 12], [13, 29, 11], [0, 5, 3, 11], 5, 6, 7, [3, 8, 21], 3];
+var arrUnique = arr.flat(2);
+var unique = arrUnique.filter(onlyUnique);
+console.log(unique);
 
 //------------------------------------------------------------
 // Написать функцию которая возвращает true/false
 //  в зависимости от того - все ли уникальные значения в массиве или есть не уникальные
 
-// function testUnique(arr) {
+// function findUnique(arr) {
 //     for (var i = 0; i < arr.length - 1; i++) {
 //         for (var j = i + 1; j < arr.length; j++) {
 //             if (arr[i] === arr[j])
@@ -25,7 +25,7 @@
 //     return true;
 // }
 
-// console.log(testUnique(["a", "1", "1", "25", "ew", "qwe", "5"]));
+// console.log(findUnique(["a", "1", "1", "25", "ew", "qwe", "5"]));
 
 //------------------------------------------------------------
 
