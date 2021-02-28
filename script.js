@@ -1,3 +1,44 @@
+// //Посчитать количество ссылок на странице, вывести их содержимое
+// let input = document.getElementById('colLinks').value;
+// console.log("Количество ссылок = " + document.getElementsByTagName('a').length);
+// document.getElementById('colLinks').value = input;
+
+function getLinks() {
+    let input = document.getElementById('colLinks').value;
+    console.log("Количество ссылок = " + document.getElementsByTagName('a').length);
+    document.getElementById('colLinks').value = input;
+
+}
+
+
+function getValue() {
+    let elements = document.getElementsByTagName("a");
+    for (i = 0; i < elements.length; i++) {
+        console.log(elements[i].innerHTML);
+    };
+
+}
+
+
+//--------------------
+
+
+//Посчитать количество тегов “p” на странице которые имеют класс “phrase” - вывести их содержимое
+
+function getPhrase() {
+    let elem = document.querySelectorAll('p.phrase');
+    for (let i = 0; i < elem.length; i++) {
+        console.log("Значения классов phrase = " + elem[i].innerHTML);
+    }
+}
+
+
+function colPhrase() {
+    let a = document.querySelectorAll('p.phrase').length;
+    console.log("Количество классов phrase = " + a);
+}
+
+// --------------------
 function Student(selector) {
     this.students = [];
     this.container = document.querySelector(selector);
