@@ -1,79 +1,282 @@
+function Student(selector) {
+    this.students = [];
+    this.container = document.querySelector(selector);
+    this.table = this.container.querySelector("table tbody");
+    this.createButton = this.container.querySelector('form [type="submit"]');
 
-// Задан двумерный массив - объединить каждый внутренний массив с 
-//верхнем массивом - только по уникальным значениям.
-
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
 }
 
-var arr = [1, 2, 4, [8, 4, 12], [13, 29, 11], [0, 5, 3, 11], 5, 6, 7, [3, 8, 21], 3];
-var arrUnique = arr.flat(2);
-var unique = arrUnique.filter(onlyUnique);
-console.log(unique);
+Student.prototype.init = function () {
+    this.getStudents();
+    this.createButton.addEventListener("click", this.eventAddStudent.bind(this));
+}
 
-//------------------------------------------------------------
-// Написать функцию которая возвращает true/false
-//  в зависимости от того - все ли уникальные значения в массиве или есть не уникальные
+Student.prototype.eventAddStudent = function (event) {
+    event.preventDefault();
 
-// function findUnique(arr) {
-//     for (var i = 0; i < arr.length - 1; i++) {
-//         for (var j = i + 1; j < arr.length; j++) {
-//             if (arr[i] === arr[j])
-//                 return false;
-//         }
-//     }
-//     return true;
-// }
+    let form = event.target.closest("form");
+    let formData = new FormData(form);
 
-// console.log(findUnique(["a", "1", "1", "25", "ew", "qwe", "5"]));
+    let student = {
+        first_name: formData.get("firstname"),
+        course: formData.get("course"),
+        estimate: formData.get("estimate"),
+        is_active: formData.get("is_active") !== null,
+    };
 
-//------------------------------------------------------------
+    var self = this;
+    self.sendAjax({
+        url: "https://evgeniychvertkov.com/api/student/",
+        method: "POST",
+        body: student,
+        success: function (response) {
+            if (response.is_success) {
+                self.students.push(response.student);
+                self.render();
+            }
+        }
+    });
+};
 
+Student.prototype.eventRemove = function (event) {
+    var self = this;
+    let tr = event.target.closest("tr");
+    let index = parseInt(tr.getAttribute("data-index"));
+    self.sendAjax({
+        url: "https://evgeniychvertkov.com/api/student/" + this.students[index].id + "/",
+        method: "DELETE",
+        success: function (response) {
+            if (response.is_success) {
+                self.students.splice(index, 1);
+                self.render();
+            }
+        }
+    });
+};
 
-// Задан массив объектов студентов вида
-// [{ name: “Ivan”, estimate: 4, course: 1, active: true },
-// { name: “Ivan”, estimate: 3, course: 1, active: true },
-// { name: “Ivan”, estimate: 2, course: 4, active: false },
-//     { name: “Ivan”, estimate: 5, course: 2, active: true }] -
-//     заполнить его более большим количеством студентов.
-// Написать функцию которая возвращает: среднюю оценку
-// студентов в разрезе каждого курса: { 1: 3.2, 2: 3.5, 3: 4.5, 4: 3, 5: 4.5 }
-// с учетом только тех студентов которые активны.
-// Посчитать количество неактивных студентов в разрезе каждого курса и общее количество неактивных студентов.
-let students = [
-    { name: "Ivan", estimate: 3, course: 1, active: true },
-    { name: "Petya", estimate: 4, course: 1, active: false },
-    { name: "Anton", estimate: 3, course: 4, active: false },
-    { name: "Andrew", estimate: 2, course: 2, active: true },
-    { name: "Vasya", estimate: 3, course: 3, active: true },
-    { name: "Roman", estimate: 3, course: 2, active: false },
-    { name: "Vladimir", estimate: 5, course: 4, active: true },
-    { name: "Oleg", estimate: 5, course: 3, active: true },
-];
+Student.prototype.eventChangeStatus = function (event) {
+    var self = this;
+    let tr = event.target.closest("tr");
+    let index = parseInt(tr.getAttribute("data-index"));
+    self.sendAjax({
+        url: "https://evgeniychvertkov.com/api/student/",
+        method: "PUT",
+        body: self.students[index],
+        success: function (response) {
+            if (!response.is_success) {
 
+            }
+        }
+    });
+};
 
-const courses = {};
-const results = {};
+Student.prototype.eventChangeFirstname = function (event) {
+    var self = this;
+    let td = event.target;
+    tr = td.closest("tr");
+    let index = parseInt(tr.getAttribute("data-index"));
 
-function getAvgEstimate() {
-    for (let student of students) {
-        if (!student.active) {
+    td.innerHTML = "";
+    let input = document.createElement("INPUT");
+    input.type = "text";
+    input.addEventListener("keyup", this.eventNewFirstname.bind(this));
+    input.addEventListener("blur", this.eventBlurNewFirstname.bind(this));
+
+    td.appendChild(input);
+    input.focus();
+};
+
+Student.prototype.eventNewFirstname = function (event) {
+    event.preventDefault();
+
+    let self = this;
+    if (event.keyCode === 13) {
+        event.target.removeEventListener("blur", this.eventBlurNewFirstname.bind(this));
+        let firstname = event.target.value;
+
+        let tr = event.target.closest("tr");
+        let index = tr.getAttribute("data-index");
+
+        let student = {
+            id: self.students[index].id,
+            first_name: firstname,
+            course: self.students[index].course,
+            estimate: self.students[index].estimate,
+            is_active: self.students[index].is_active,
+        };
+
+        self.sendAjax({
+            url: "https://evgeniychvertkov.com/api/student/",
+            method: "PUT",
+            body: student,
+            success: function (response) {
+                if (response.is_success) {
+                    event.target.closest("td").innerHTML = firstname;
+                    self.students[index].first_name = firstname;
+                }
+            }
+        });
+    }
+};
+
+Student.prototype.eventBlurNewFirstname = function (event) {
+    event.preventDefault();
+
+    let tr = event.target.closest("tr");
+    let td = event.target.closest("td");
+    let index = tr.getAttribute("data-index");
+
+    td.innerHTML = this.students[index].first_name;
+};
+
+Student.prototype.avgEstimate = function () {
+    let courses = {};
+
+    for (let i = 0; i < this.students.length; i++) {
+        if (courses[this.students[i].course] === undefined) {
+            courses[this.students[i].course] = {
+                counter: 0,
+                sumEstimate: 0,
+            };
+        }
+        if (this.students[i].is_active) {
+            courses[this.students[i].course].counter++;
+            courses[this.students[i].course].sumEstimate += this.students[i].estimate;
+        }
+    }
+
+    // console.log(courses);
+    for (let numberCourse in courses) {
+        if (courses[numberCourse].counter === 0) {
+            courses[numberCourse].avgEstimate = 0;
             continue;
         }
-        const course = courses[student.course];
-        if (!course) {
-            courses[student.course] = { studentsActive: 1, estimate: student.estimate };
-        } else {
-            course.studentsActive = course.studentsActive + 1;
-            course.estimate = course.estimate + student.estimate;
-        }
+        courses[numberCourse].avgEstimate = courses[numberCourse].sumEstimate / courses[numberCourse].counter;
     }
-    for (let course in courses) {
-        results[course] = courses[course].estimate / courses[course].studentsActive;
-    }
-    return results;
+    return courses;
 
 }
 
-console.log(getAvgEstimate());
 
+Student.prototype.render = function () {
+    this.table.innerHTML = "";
+    for (let i = 0; i < this.students.length; i++) {
+        let tr = document.createElement("TR");
+        tr.setAttribute("data-index", i);
+
+        let tdFio = document.createElement("TD");
+        tdFio.innerHTML = this.students[i].first_name;
+        tdFio.addEventListener("click", this.eventChangeFirstname.bind(this));
+        tr.appendChild(tdFio);
+
+        let tdCourse = document.createElement("TD");
+        tdCourse.innerHTML = this.students[i].course;
+        tr.appendChild(tdCourse);
+
+        let tdEstimate = document.createElement("TD");
+        tdEstimate.innerHTML = this.students[i].estimate;
+        tr.appendChild(tdEstimate);
+
+        let tdActive = document.createElement("TD");
+        let checkbox = document.createElement("INPUT");
+        checkbox.type = "checkbox";
+        checkbox.checked = this.students[i].is_active;
+        checkbox.addEventListener("change", this.eventChangeStatus.bind(this));
+        tdActive.appendChild(checkbox);
+        tr.appendChild(tdActive);
+
+        let tdAction = document.createElement("TD");
+        tdAction.innerHTML = "Delete";
+        tdAction.addEventListener("click", this.eventRemove.bind(this));
+        tr.appendChild(tdAction);
+
+
+
+
+
+        this.table.appendChild(tr);
+    }
+
+    let avg = this.avgEstimate();
+
+    const allCourses = document.getElementById("spans");
+    const span = allCourses.querySelectorAll('span');
+
+
+
+    for (let i = 0; i < span.length; i++) {
+        const number = i + 1;
+        if (avg[number] === undefined) {
+            span[i].innerHTML = 'средняя оценка курса  0';
+        } else {
+            span[i].innerHTML = 'средняя оценка курса ' + number + ' = ' + avg[number].avgEstimate;
+        }
+    }
+
+    if (this.students.length === 0) {
+        alert("Студенты не найдены");
+    }
+    this.avgEstimate();
+
+};
+
+
+Student.prototype.addStudent = function (student) {
+    var self = this;
+    self.sendAjax({
+        url: "https://evgeniychvertkov.com/api/student/",
+        method: "POST",
+        body: student,
+        success: function (response) {
+            if (response.is_success) {
+                self.students.push(student);
+                self.render();
+            }
+        }
+    });
+};
+
+Student.prototype.getStudents = function () {
+    var self = this;
+    self.sendAjax({
+        url: "https://evgeniychvertkov.com/api/student/",
+        method: "GET",
+        success: function (response) {
+            if (response.is_success) {
+                self.students = response.students;
+                self.render();
+            }
+        }
+    });
+};
+
+Student.prototype.sendAjax = function (data) {
+    var self = this;
+    var xhr = new XMLHttpRequest();
+
+    xhr.open(data.method, data.url, true);
+
+    xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+    xhr.setRequestHeader("X-Authorization-Token", "170c5197-72a1-11eb-b8cf-001b21474ee8");
+
+    if (data.body !== undefined) {
+        xhr.send(JSON.stringify(data.body));
+    } else {
+        xhr.send();
+    }
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState != 4) return;
+        if (xhr.status == 200) {
+            let response = JSON.parse(xhr.response);
+            data.success(response);
+        }
+    }
+}
+
+window.onload = function () {
+    (new Student(".students")).init();
+    // let avgEstimate = 10;
+    // document.querySelector(".estimate").innerHTML = avgEstimate;
+
+}

@@ -1,0 +1,17 @@
+table td {
+    border: 1px solid #171717;
+    border-collapse: separate;
+    border-style: double;
+    width: 300px;
+    margin: auto;
+    
+}
+table th {
+    border: 1px solid #171717;
+    border-collapse: collapse;
+    width: 300px;
+    margin: auto;
+}
+span {
+    text-align: left;
+}

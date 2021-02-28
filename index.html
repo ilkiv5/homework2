@@ -2,13 +2,51 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>new title</title>
+
+    <script src="script.js" async></script>
+    <link rel="stylesheet" href="style.css">
+
+
 </head>
 
 <body>
-    <script src="script.js"></script>
+    <div class="students">
+        <form action="" method="GET" onsubmit="return false;">
+            <input type="text" name="firstname" value="" placeholder="name" />
+            <input type="number" name="course" value="" />
+            <input type="number" name="estimate" value="" />
+            <input type="checkbox" id="is_active" name="is_active" value="" />
+            <label for="is_active">Активность</label>
+            <input type="submit" name="send" value="Send" />
+        </form>
+
+        <table align="left">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Курс</th>
+                    <th>Оценка</th>
+                    <th>Активность</th>
+                    <th>Действие</th>
+
+                </tr>
+            </thead>
+            <div id="spans">
+                <span id="1">span</span><br>
+                <span id="2">span</span><br>
+                <span id="3">span</span><br>
+                <span id="4">span</span><br>
+                <span id="5">span</span><br>
+            </div>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="estimate"></div>
 </body>
 
 </html>
