@@ -15,3 +15,16 @@ table th {
 span {
     text-align: left;
 }
+
+.lowthree {
+    background-color:red;
+}
+.lowfour {
+    background-color:yellow;
+}
+.five {
+    background-color: green;
+}
+.white {
+    background-color: purple;
+}

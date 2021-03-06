@@ -1,50 +1,8 @@
-// //Посчитать количество ссылок на странице, вывести их содержимое
-// let input = document.getElementById('colLinks').value;
-// console.log("Количество ссылок = " + document.getElementsByTagName('a').length);
-// document.getElementById('colLinks').value = input;
-
-function getLinks() {
-    let input = document.getElementById('colLinks').value;
-    console.log("Количество ссылок = " + document.getElementsByTagName('a').length);
-    document.getElementById('colLinks').value = input;
-
-}
-
-
-function getValue() {
-    let elements = document.getElementsByTagName("a");
-    for (i = 0; i < elements.length; i++) {
-        console.log(elements[i].innerHTML);
-    };
-
-}
-
-
-//--------------------
-
-
-//Посчитать количество тегов “p” на странице которые имеют класс “phrase” - вывести их содержимое
-
-function getPhrase() {
-    let elem = document.querySelectorAll('p.phrase');
-    for (let i = 0; i < elem.length; i++) {
-        console.log("Значения классов phrase = " + elem[i].innerHTML);
-    }
-}
-
-
-function colPhrase() {
-    let a = document.querySelectorAll('p.phrase').length;
-    console.log("Количество классов phrase = " + a);
-}
-
-// --------------------
 function Student(selector) {
     this.students = [];
     this.container = document.querySelector(selector);
     this.table = this.container.querySelector("table tbody");
     this.createButton = this.container.querySelector('form [type="submit"]');
-
 }
 
 Student.prototype.init = function () {
@@ -121,8 +79,8 @@ Student.prototype.eventChangeFirstname = function (event) {
     let input = document.createElement("INPUT");
     input.type = "text";
     input.addEventListener("keyup", this.eventNewFirstname.bind(this));
-    input.addEventListener("blur", this.eventBlurNewFirstname.bind(this));
-
+    this.eventBlur = this.eventBlurNewFirstname.bind(this);
+    input.addEventListener("blur", this.eventBlur);
     td.appendChild(input);
     input.focus();
 };
@@ -132,11 +90,12 @@ Student.prototype.eventNewFirstname = function (event) {
 
     let self = this;
     if (event.keyCode === 13) {
-        event.target.removeEventListener("blur", this.eventBlurNewFirstname.bind(this));
+        event.target.removeEventListener("blur", this.eventBlur);
         let firstname = event.target.value;
 
         let tr = event.target.closest("tr");
         let index = tr.getAttribute("data-index");
+
 
         let student = {
             id: self.students[index].id,
@@ -170,6 +129,8 @@ Student.prototype.eventBlurNewFirstname = function (event) {
     td.innerHTML = this.students[index].first_name;
 };
 
+
+
 Student.prototype.avgEstimate = function () {
     let courses = {};
 
@@ -185,8 +146,6 @@ Student.prototype.avgEstimate = function () {
             courses[this.students[i].course].sumEstimate += this.students[i].estimate;
         }
     }
-
-    // console.log(courses);
     for (let numberCourse in courses) {
         if (courses[numberCourse].counter === 0) {
             courses[numberCourse].avgEstimate = 0;
@@ -196,7 +155,129 @@ Student.prototype.avgEstimate = function () {
     }
     return courses;
 
+
 }
+
+
+
+Student.prototype.eventChangeCourse = function (event) {
+    var self = this;
+    let td = event.target;
+    tr = td.closest("tr");
+    let index = parseInt(tr.getAttribute("data-index"));
+
+    td.innerHTML = "";
+    let input = document.createElement("INPUT");
+    input.type = "number";
+    input.addEventListener("keyup", this.eventNewNumberCourse.bind(this));
+    this.eventBlurCourse = this.eventBlurNewNumberCourse.bind(this);
+    input.addEventListener("blur", this.eventBlurCourse);
+    td.appendChild(input);
+    input.focus();
+};
+
+Student.prototype.eventNewNumberCourse = function (event) {
+    event.preventDefault();
+
+    let self = this;
+    if (event.keyCode === 13) {
+        event.target.removeEventListener("blur", this.eventBlurCourse);
+        let course = Number(event.target.value);
+
+        let tr = event.target.closest("tr");
+        let index = tr.getAttribute("data-index");
+
+        let student = {
+            id: self.students[index].id,
+            first_name: self.students[index].first_name,
+            course: course,
+            estimate: self.students[index].estimate,
+            is_active: self.students[index].is_active,
+        };
+        self.sendAjax({
+            url: "https://evgeniychvertkov.com/api/student/",
+            method: "PUT",
+            body: student,
+            success: function (response) {
+                if (response.is_success) {
+                    event.target.closest("td").innerHTML = course;
+                    self.students[index].course = course;
+                }
+            }
+        });
+    }
+};
+
+Student.prototype.eventBlurNewNumberCourse = function (event) {
+    event.preventDefault();
+
+    let tr = event.target.closest("tr");
+    let td = event.target.closest("td");
+    let index = tr.getAttribute("data-index");
+
+    td.innerHTML = this.students[index].course;
+};
+
+
+Student.prototype.eventChangeEstimate = function (event) {
+    var self = this;
+    let td = event.target;
+    tr = td.closest("tr");
+    let index = parseInt(tr.getAttribute("data-index"));
+
+    td.innerHTML = "";
+    let input = document.createElement("INPUT");
+    input.type = "number";
+    input.addEventListener("keyup", this.eventNewEstimate.bind(this));
+    this.eventBlurEstimate = this.eventBlurNewEstimate.bind(this);
+    input.addEventListener("blur", this.eventBlurEstimate);
+    td.appendChild(input);
+    input.focus();
+};
+
+Student.prototype.eventNewEstimate = function (event) {
+    event.preventDefault();
+
+    let self = this;
+    if (event.keyCode === 13) {
+        event.target.removeEventListener("blur", this.eventBlurEstimate);
+        let estimate = Number(event.target.value);
+
+        let tr = event.target.closest("tr");
+        let index = tr.getAttribute("data-index");
+
+        let student = {
+            id: self.students[index].id,
+            first_name: self.students[index].first_name,
+            course: self.students[index].course,
+            estimate: estimate,
+            is_active: self.students[index].is_active,
+        };
+        self.sendAjax({
+            url: "https://evgeniychvertkov.com/api/student/",
+            method: "PUT",
+            body: student,
+            success: function (response) {
+                if (response.is_success) {
+                    event.target.closest("td").innerHTML = estimate;
+                    self.students[index].estimate = estimate;
+                }
+            }
+        });
+    }
+};
+
+Student.prototype.eventBlurNewEstimate = function (event) {
+    event.preventDefault();
+
+    let tr = event.target.closest("tr");
+    let td = event.target.closest("td");
+    let index = tr.getAttribute("data-index");
+
+    td.innerHTML = this.students[index].estimate;
+};
+
+
 
 
 Student.prototype.render = function () {
@@ -212,10 +293,12 @@ Student.prototype.render = function () {
 
         let tdCourse = document.createElement("TD");
         tdCourse.innerHTML = this.students[i].course;
+        tdCourse.addEventListener("click", this.eventChangeCourse.bind(this));
         tr.appendChild(tdCourse);
 
         let tdEstimate = document.createElement("TD");
         tdEstimate.innerHTML = this.students[i].estimate;
+        tdEstimate.addEventListener("click", this.eventChangeEstimate.bind(this));
         tr.appendChild(tdEstimate);
 
         let tdActive = document.createElement("TD");
@@ -232,10 +315,17 @@ Student.prototype.render = function () {
         tr.appendChild(tdAction);
 
 
-
-
-
         this.table.appendChild(tr);
+
+        if (this.students[i].estimate < 4) {
+            tr.classList.add("lowthree");
+        } else if (this.students[i].estimate < 5) {
+            tr.classList.add("lowfour");
+        } else if (this.students[i].estimate === 5) {
+            tr.classList.add("five");
+        } else if (this.students[i].estimate > 5) {
+            alert("Слишком большая оценка");
+        }
     }
 
     let avg = this.avgEstimate();
@@ -245,14 +335,31 @@ Student.prototype.render = function () {
 
 
 
+
+
     for (let i = 0; i < span.length; i++) {
-        const number = i + 1;
-        if (avg[number] === undefined) {
+        const num = i + 1;
+        if (avg[num] === undefined) {
             span[i].innerHTML = 'средняя оценка курса  0';
         } else {
-            span[i].innerHTML = 'средняя оценка курса ' + number + ' = ' + avg[number].avgEstimate;
+            span[i].innerHTML = 'средняя оценка курса ' + num + ' = ' + avg[num].avgEstimate;
+        };
+
+        if (avg[num] === undefined) {
+            span[i].classList.add('white');
+        }
+        else if (avg[num].avgEstimate < 4) {
+            span[i].classList.add('lowthree');
+        }
+        else if (avg[num].avgEstimate < 5) {
+            span[i].classList.add('lowfour');
+
+        } else if (avg[num].avgEstimate === 5) {
+            span[i].classList.add('five');
         }
     }
+
+
 
     if (this.students.length === 0) {
         alert("Студенты не найдены");
@@ -317,7 +424,5 @@ Student.prototype.sendAjax = function (data) {
 
 window.onload = function () {
     (new Student(".students")).init();
-    // let avgEstimate = 10;
-    // document.querySelector(".estimate").innerHTML = avgEstimate;
-
 }
+
